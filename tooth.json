@@ -1,0 +1,11 @@
+{
+    "format_version": 2,
+    "tooth": "github.com/LiteLDev/mc-w10-versiondb-auto-update",
+    "version": "0.0.0",
+    "info": {
+        "name": "mc-w10-versiondb-auto-update",
+        "description": "mc-w10-versiondb-auto-update",
+        "author": "LiteLDev",
+        "tags": []
+    }
+}

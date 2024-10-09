@@ -139,6 +139,15 @@ def checkForUpdate(pfn, categoryId, releaseType):
         commitMsg = "Minecraft " + gameVer
         if releaseType == 2:
              commitMsg += " (Preview)"
+            
+        result = subprocess.run(["git", "describe", "--tags", "--abbrev=0"], capture_output=True, text=True)
+        latest_tag = result.stdout.strip()
+
+        if latest_tag.startswith('v'):
+            tag_number = int(latest_tag[1:]) + 1
+        else:
+            tag_number = 1
+        
 
         with open("versions.json.min", "w") as f:
             json.dump(versions, f)
@@ -152,6 +161,11 @@ def checkForUpdate(pfn, categoryId, releaseType):
         subprocess.run(["git", "add", "versions.json.min", "versions.txt"])
         subprocess.run(["git", "-c", "user.name='github-actions[bot]'", "-c", "user.email='github-actions[bot]@users.noreply.github.com'", "commit", "-m", commitMsg])
         subprocess.run(["git", "push", "origin"])
+
+        # Add the new tag
+        tag_name = f"v{tag_number}"
+        subprocess.run(["git", "tag", tag_name])
+        subprocess.run(["git", "push", "origin", tag_name])
 
         if os.getenv("ENABLE_NOTIFICATION"):
             try:
