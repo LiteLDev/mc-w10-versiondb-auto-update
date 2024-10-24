@@ -151,12 +151,13 @@ def checkForUpdate(pfn, categoryId, releaseType):
 
         with open("versions.json.min", "w") as f:
             json.dump(versions, f)
+
         with open("versions.txt", "r") as f:
             verTxt = f.read()
             target = "Releases" if releaseType == 0 else "Preview"
-            start = verTxt.find("\n\n", verTxt.find(target))
+            start = verTxt.find("\n\n", verTxt.find(target)) + 1
             with open("versions.txt", "w") as wf:
-                wf.write(verTxt[:start] + "\n" + updateTxt + verTxt[start:])
+                wf.write(verTxt[:start] + updateTxt + verTxt[start:])
 
         subprocess.run(["git", "add", "versions.json.min", "versions.txt"])
         subprocess.run(["git", "-c", "user.name='github-actions[bot]'", "-c", "user.email='github-actions[bot]@users.noreply.github.com'", "commit", "-m", commitMsg])
